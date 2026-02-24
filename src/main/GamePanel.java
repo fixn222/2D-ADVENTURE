@@ -1,24 +1,29 @@
 package main;
+
+import Tile.TileManager;
 import entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;// 16x16 tiles
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale; // 48x48 pixel
 
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
 
-    final int screenWidth = tileSize * maxScreenCol; // 768 pixels
-    final int screenHeight = tileSize * maxScreenRow;
+    public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
+    public final int screenHeight = tileSize * maxScreenRow;
 
     // initialize FPS
     int fps = 60;
+
+    TileManager tileManager = new TileManager(this);
 
     Thread gameThread = new Thread(this);
     KeyHandler keyH = new KeyHandler();
@@ -50,11 +55,8 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-        long  timer = 0 ;
-        int drawCount = 0 ;
-
-
-
+        long timer = 0;
+        int drawCount = 0;
 
         while (gameThread != null) {
 
@@ -72,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable {
 
                 repaint();
                 delta--;
-                drawCount ++;
+                drawCount++;
             }
 
             if (timer >= 1000000000) {
@@ -101,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
-
+        tileManager.draw(g2);
         player.draw(g2);
 
         g2.dispose();
